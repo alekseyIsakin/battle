@@ -4,30 +4,40 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gxcxq"]
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_gxcxq"]
-points = PackedVector3Array(0, 0, 0, 0.5, 1, 0.5, -0.5, 1, -0.5, 0, -1, 0, 0.5, 1, -0.5, -0.5, 1, 0.5)
-
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_gxcxq"]
 
+[sub_resource type="SphereMesh" id="SphereMesh_gxcxq"]
+radius = 0.2
+height = 0.4
+
 [node name="CharacterBody3D" type="CharacterBody3D"]
+collision_layer = 3
 floor_max_angle = 0.872665
 script = ExtResource("1_gxcxq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_gxcxq")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
-shape = SubResource("ConvexPolygonShape3D_gxcxq")
-disabled = true
-debug_fill = false
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_gxcxq")
 
 [node name="CameraPoint" type="Node3D" parent="."]
 
-[node name="Camera3D" type="Camera3D" parent="CameraPoint"]
-transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 3, 4)
+[node name="CameraPin" type="Node3D" parent="CameraPoint"]
+transform = Transform3D(1, 1.13133e-08, -1.48943e-09, -1.13133e-08, 0.965926, -0.258819, -1.48943e-09, 0.258819, 0.965926, 0, 0, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraPoint/CameraPin"]
+transform = Transform3D(1, -2.18557e-08, -5.85622e-09, 2.18557e-08, 0.866025, 0.5, -5.85622e-09, -0.5, 0.866025, 0, 0.2, 0)
+collision_mask = 4
+spring_length = 4.0
+
+[node name="Camera3D" type="Camera3D" parent="CameraPoint/CameraPin/SpringArm3D"]
+transform = Transform3D(1, 2.26267e-08, -2.22045e-16, -2.18557e-08, 0.965926, -0.258819, -5.85621e-09, 0.258819, 0.965926, -6.71362e-09, 0.226795, 3.94641)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CameraPoint/CameraPin"]
+transform = Transform3D(-1, -5.27356e-15, -8.74228e-08, 5.32907e-15, 1, -8.9407e-08, 8.74228e-08, -8.9407e-08, -1, -2.65425e-07, 0.548476, 0.527792)
+mesh = SubResource("SphereMesh_gxcxq")
+skeleton = NodePath("")
 
 [node name="GroundCheck" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
