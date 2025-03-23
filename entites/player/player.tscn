@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://d1lmasyic0uon"]
+
+[ext_resource type="Script" uid="uid://dvbq2kmaeoixw" path="res://entites/player/player.gd" id="1_gxcxq"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gxcxq"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_gxcxq"]
+points = PackedVector3Array(0, 0, 0, 0.5, 1, 0.5, -0.5, 1, -0.5, 0, -1, 0, 0.5, 1, -0.5, -0.5, 1, 0.5)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_gxcxq"]
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+floor_max_angle = 0.872665
+script = ExtResource("1_gxcxq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_gxcxq")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_gxcxq")
+disabled = true
+debug_fill = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_gxcxq")
+
+[node name="CameraPoint" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="CameraPoint"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 3, 4)
+
+[node name="GroundCheck" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)

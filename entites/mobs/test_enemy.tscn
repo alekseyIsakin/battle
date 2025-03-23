@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bvp861j2gkf6m"]
+
+[ext_resource type="Script" uid="uid://d4g5qct0t7a4b" path="res://entites/player/entity.gd" id="1_rssfo"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_rssfo"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2qtue"]
+
+[node name="BaseEntity" type="CharacterBody3D"]
+script = ExtResource("1_rssfo")
+metadata/_custom_type_script = "uid://d4g5qct0t7a4b"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_rssfo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_2qtue")
