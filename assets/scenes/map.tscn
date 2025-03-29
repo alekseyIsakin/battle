@@ -49,7 +49,7 @@ agent_max_slope = 46.0
 
 [node name="map" type="Node3D"]
 
-[node name="player" parent="." instance=ExtResource("1_bnucp")]
+[node name="player" parent="." groups=["player"] instance=ExtResource("1_bnucp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 2, 20.1)
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
@@ -71,7 +71,7 @@ environment = SubResource("Environment_45j4w")
 transform = Transform3D(0.707107, -0.5, 0.5, -3.09086e-08, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 50, 0)
 shadow_enabled = true
 
-[node name="Navigation" type="NavigationRegion3D" parent="."]
+[node name="Navigation" type="NavigationRegion3D" parent="." groups=["npc_navigation"]]
 navigation_mesh = SubResource("NavigationMesh_07t7k")
 
 [node name="GridMap" type="GridMap" parent="Navigation"]

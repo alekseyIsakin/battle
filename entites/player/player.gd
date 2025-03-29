@@ -115,8 +115,13 @@ func _physics_process(delta: float) -> void:
 					MainMesh.rotate_y(a)
 		
 		move_vector = _spd * (f + r).normalized() * l
+	else:
+		move_vector = Vector3.ZERO
 	
 	if (move_vector != Vector3.ZERO):
+		print(pprint(move_vector))
+		print(pprint(baseVelocity))
+		print(pprint(velocity))
 		baseVelocity = velocity
 		velocity = baseVelocity + move_vector
 		move_and_slide()

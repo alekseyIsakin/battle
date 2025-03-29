@@ -19,6 +19,11 @@ config/icon="res://icon.svg"
 
 project/assembly_name="battle"
 
+[global_group]
+
+npc_navigation=""
+player=""
+
 [input]
 
 forward={
