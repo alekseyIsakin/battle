@@ -2,9 +2,10 @@ extends CharacterBody3D
 
 @onready var CameraPoint = $CameraPoint
 @onready var CameraPin = $CameraPoint/CameraPin
-@onready var Camera = $CameraPoint/CameraPin/Camera3D
+@onready var Camera:Camera3D = $CameraPoint/CameraPin/SpringArm3D/Camera3D
 @onready var GroundRay = $GroundCheck
 @onready var CameraRay = $CameraPoint/CameraPin/RayCast3D
+@onready var MainMesh = $MeshInstance3D
 
 var speed:float = 50
 var speed_mod:float = 1
@@ -14,8 +15,16 @@ func _enter_tree() -> void:
 	pass
 
 func get_forward()-> Vector3:
+	var cb:Basis = MainMesh.global_basis
+	return cb.z
+
+func get_camera_forward()-> Vector3:
 	var cb:Basis = CameraPoint.global_basis
 	return cb.z
+
+func get_camera_right()-> Vector3:
+	var cb:Basis = CameraPoint.global_basis
+	return cb.x
 
 func get_right()-> Vector3:
 	var cb:Basis = CameraPoint.global_basis
@@ -24,12 +33,13 @@ func get_right()-> Vector3:
 func _ready() -> void:
 	set_process_input(true)
 
+func _process(delta: float) -> void:
+	pass
+
 var baseVelocity:Vector3 = Vector3.ZERO
 var move_vector = Vector3.ZERO
 var inertion:float = .02
 var _move_vector = Vector3.ZERO
-
-var skip = 0
 
 func pprint(v:Vector3) -> String:
 	return "%+8.3f %+8.3f %+8.3f" % [v.x, v.y, v.z]
@@ -45,15 +55,13 @@ func _debug_action_process(event:InputEvent):
 				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func rotate_camera(v: Vector2):
-	CameraPoint.rotate_y(v.x)
-	CameraPin.rotate_x(v.y)
-	
 	const max_r = -(PI)/3
 	const min_r = 1
 	var x = min(min_r, max(max_r, CameraPin.rotation.x))
-	print(min_r)
-	print(CameraPin.rotation.x)
-	CameraPin.rotation.x = x
+	
+	CameraPoint.rotation.y += v.x
+	CameraPin.rotation.x += v.y
+	CameraPin.rotation.x = clampf(CameraPin.rotation.x, max_r, min_r)
 
 func _physics_process(delta: float) -> void:
 	var jump = Input.is_action_just_pressed("jump")
@@ -82,7 +90,7 @@ func _physics_process(delta: float) -> void:
 	if (rgh == 0):
 		_move_vector.x *= friction
 	
-	if(_move_vector.length() < 0.001):
+	if(_move_vector.length() < 0.1):
 		_move_vector = Vector3.ZERO
 	velocity.y = free_fall_speed
 	
@@ -91,8 +99,20 @@ func _physics_process(delta: float) -> void:
 	if (_move_vector != Vector3.ZERO):
 		var n = _move_vector.normalized()
 		var l:float =  max(abs(_move_vector.x),  abs(_move_vector.z))
-		var f:Vector3 = get_forward()  * n.z * .1
+		var f:Vector3 = get_forward() * n.z * .1
 		var r:Vector3 = get_right() * n.x * .1
+		
+		if (is_on_floor()):
+			var a = get_camera_forward().angle_to(get_forward())
+			var s = get_camera_right().dot(get_forward())
+			if (a < .001): 
+				MainMesh.global_rotation.y = Camera.global_rotation.y
+			else:
+				a *= .07
+				if (sign(s) > 0):
+					MainMesh.rotate_y(-a)
+				else:
+					MainMesh.rotate_y(a)
 		
 		move_vector = _spd * (f + r).normalized() * l
 	
@@ -111,17 +131,3 @@ func _input(event: InputEvent) -> void:
 	if (event is InputEventMouseMotion):
 		var input:InputEventMouseMotion = event as InputEventMouseMotion
 		rotate_camera(input.relative * -.0008)
-		#r_x = input.relative.x * -.0008
-		#r_y = input.relative.y * -.0008
-	#
-	#if (r_x != 0 or r_y != 0):
-		#CameraPoint.rotate_y(r_x)
-		#CameraPin.rotate_x(r_y)
-		#
-		#const max_r = -(PI)/3
-		#const min_r = 1
-		#var x = min(min_r, max(max_r, CameraPin.rotation.x))
-		#print(min_r)
-		#print(CameraPin.rotation.x)
-		#CameraPin.rotation.x = x
-		##print(x)

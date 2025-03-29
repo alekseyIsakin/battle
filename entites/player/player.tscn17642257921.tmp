@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://d1lmasyic0uon"]
+[gd_scene load_steps=6 format=3 uid="uid://d1lmasyic0uon"]
 
 [ext_resource type="Script" uid="uid://dvbq2kmaeoixw" path="res://entites/player/player.gd" id="1_gxcxq"]
-[ext_resource type="Script" uid="uid://b8mmbm227ufbu" path="res://entites/player/debug_overlay.gd" id="2_qevvu"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gxcxq"]
 
@@ -17,11 +16,6 @@ height = 0.4
 collision_layer = 3
 floor_max_angle = 0.872665
 script = ExtResource("1_gxcxq")
-
-[node name="DebugOverlay" type="CanvasLayer" parent="."]
-
-[node name="Node2D" type="Node2D" parent="DebugOverlay"]
-script = ExtResource("2_qevvu")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_gxcxq")
@@ -57,5 +51,3 @@ skeleton = NodePath("")
 
 [node name="GroundCheck" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]

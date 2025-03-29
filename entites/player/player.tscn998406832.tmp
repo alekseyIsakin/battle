@@ -19,8 +19,6 @@ floor_max_angle = 0.872665
 script = ExtResource("1_gxcxq")
 
 [node name="DebugOverlay" type="CanvasLayer" parent="."]
-
-[node name="Node2D" type="Node2D" parent="DebugOverlay"]
 script = ExtResource("2_qevvu")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
